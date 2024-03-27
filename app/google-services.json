@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "784739190993",
+    "project_id": "infosphere-47289",
+    "storage_bucket": "infosphere-47289.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784739190993:android:8f5b6d7ec3c9eae077ddf0",
+        "android_client_info": {
+          "package_name": "com.neatroots.example.infosphere"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnvAl4Bx1BBn2ODASrnkjiTILNxh98CxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
