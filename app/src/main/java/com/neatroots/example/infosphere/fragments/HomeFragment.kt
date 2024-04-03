@@ -1,11 +1,21 @@
 package com.neatroots.example.infosphere.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import com.neatroots.example.infosphere.Models.ImageModel
 import com.neatroots.example.infosphere.R
+import com.neatroots.example.infosphere.Service.ApiClient
+import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,6 +29,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
+    //var view: View? = null
     private var param1: String? = null
     private var param2: String? = null
 
@@ -35,7 +46,44 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view =  inflater.inflate(R.layout.fragment_home, container, false)
+        //
+        val call = ApiClient.apiService.getImageInfo()
+        val ll: LinearLayout? = view.findViewById<LinearLayout>(R.id.item_layout)
+
+        Log.e("activity","started");
+        call.enqueue(object : Callback<List<ImageModel>> {
+            override fun onResponse(call: Call<List<ImageModel>>, response: retrofit2.Response<List<ImageModel>>) {
+                Toast.makeText(requireActivity(), "Success "+response.code(), Toast.LENGTH_SHORT).show()
+                val imageModel = response.body()
+
+                val inflater: LayoutInflater = LayoutInflater.from(requireActivity())
+
+                imageModel?.forEach {
+                    println(it.id)
+                    println(it.description)
+                    println(it.url)
+                    println(it.type)
+
+                    val inflatedLayout = inflater.inflate(R.layout.item_layout, ll, false) as LinearLayout
+
+                    val imageView: ImageView = inflatedLayout.findViewById<ImageView>(R.id.imageView) // Replace R.id.imageView with your ImageView ID
+
+                    Picasso.get().load(it.url).into(imageView)
+                    inflatedLayout.findViewById<TextView>(R.id.description).text = it.description
+                    if (ll != null) {
+                        ll.addView(inflatedLayout)
+                    }
+                }
+
+                println(imageModel)
+            }
+
+            override fun onFailure(call: Call<List<ImageModel>>, t: Throwable) {
+                println(t.message)
+            }
+        })
+        return view
     }
 
     companion object {
